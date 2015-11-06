@@ -8,19 +8,27 @@ import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-//import java.util.ArrayList;
 
 public class Signature
 {
     private String path1;
     private String path2;
 
+    /**
+     *
+     * @param dir1Path
+     * @param dir2Path
+     */
     public Signature(String dir1Path, String dir2Path)
     {
         this.path1 = dir1Path;
         this.path2 = dir2Path;
     }
 
+    /**
+     *
+     * @throws NullPointerException
+     */
     public void signatureAlgorithm() throws NullPointerException
     {
         //Get directory1 as a File
@@ -44,6 +52,12 @@ public class Signature
         }
     }
 
+    /**
+     *
+     * @param file
+     * @return
+     * @throws NoSuchAlgorithmException
+     */
     private byte[] messageDigest(File file) throws NoSuchAlgorithmException
     {
         //Use SHA-512
@@ -69,8 +83,25 @@ public class Signature
         return hashedBytes;
     }
 
+    /**
+     *
+     * @param file
+     * @param byteArray
+     */
     private void writeToOutFile(File file, byte[] byteArray)
     {
-
+        //Create output file as concatenation of directory and filename
+        File outFile = new File(this.path2+"/"+file.getName());
+        try{
+            FileOutputStream outputStream = new FileOutputStream(outFile);
+            try{
+                outputStream.write(byteArray);
+                outputStream.close();
+            } catch(IOException exception){
+                System.out.println(exception.getMessage());
+            }
+        } catch(FileNotFoundException exception){
+            System.out.println(exception.getMessage());
+        }
     }
 }
