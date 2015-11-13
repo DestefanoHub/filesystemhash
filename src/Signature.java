@@ -3,7 +3,6 @@
  */
 import java.io.File;
 import java.io.FileInputStream;
-
 import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -75,6 +74,7 @@ public class Signature
                 inputStream.close();
                 //Hash the file bytes
                 hasher.update(fileBytes);
+                //Finish and cleanup
                 hashedBytes = hasher.digest();
                 hasher.reset();
             } catch(IOException exception){
@@ -98,26 +98,12 @@ public class Signature
         //Convert byte array to hexadecimal String
         String hexHash = DatatypeConverter.printHexBinary(byteArray);
         try{
-            //Use a PrintWriter to write a String
+            //Use a PrintWriter to write a String to outFile
             PrintWriter printer = new PrintWriter(outFile);
             printer.write(hexHash);
             printer.close();
         } catch(FileNotFoundException exception){
             System.out.println(exception.toString());
         }
-
-        //Create output file as concatenation of directory and filename
-//        File outFile = new File(this.path2+"/"+file.getName());
-//        try{
-//            FileOutputStream outputStream = new FileOutputStream(outFile);
-//            try{
-//                outputStream.write(byteArray);
-//                outputStream.close();
-//            } catch(IOException exception){
-//                System.out.println(exception.getMessage());
-//            }
-//        } catch(FileNotFoundException exception){
-//            System.out.println(exception.getMessage());
-//        }
     }
 }

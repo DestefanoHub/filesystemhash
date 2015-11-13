@@ -3,10 +3,8 @@
  */
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 import java.io.FileReader;
 import java.io.BufferedReader;
 import java.security.MessageDigest;
@@ -39,13 +37,16 @@ public class Validator
         //Get directory2 as a File
         File dir2 = new File(this.path2);
         try {
-            //Get all files from directory1
+            //Get all files from directory1 and 2
             File[] dir1Files = dir1.listFiles();
             File[] dir2Files = dir2.listFiles();
-            //Loop through all files
+            //Loop through all files in directory1
             for(File file1 : dir1Files){
+                //For each file, get the file name
                 String file1Name = file1.getName();
+                //Loop through all files in directory2
                 for(File file2: dir2Files){
+                    //Check if directory2 file name matches directory1 file name
                     if(file2.getName().equals(file1Name)){
                         this.validate(file1, file2);
                     }
@@ -53,6 +54,43 @@ public class Validator
             }
         } catch(SecurityException exception){
             System.out.println(exception.getMessage());
+        }
+    }
+
+    /**
+     *
+     * @param file1
+     * @param file2
+     */
+    private void validate(File file1, File file2)
+    {
+        byte[] hashFile1 = null;
+        try{
+            //Has file from directory1 again
+            hashFile1 = this.messageDigest(file1);
+            //Convert the hash bytes to hex String
+            String hexHash1 = DatatypeConverter.printHexBinary(hashFile1);
+            try{
+                //Read hex String from file in directory2
+                FileReader fileReader = new FileReader(file2);
+                BufferedReader bufferedReader = new BufferedReader(fileReader);
+                try{
+                    //The hex String is all one line
+                    String file2Contents = bufferedReader.readLine();
+                    //Check if the hex Strings of the two files are equal
+                    if(hexHash1.equals(file2Contents)){
+                        System.out.println(file1.getName() + " is valid");
+                    } else{
+                        System.out.println(file1.getName() + " is NOT valid");
+                    }
+                } catch(IOException exception3){
+                    System.out.println(exception3.toString());
+                }
+            } catch(FileNotFoundException exception2){
+                System.out.println(exception2.toString());
+            }
+        } catch(NoSuchAlgorithmException exception){
+            System.out.println(exception.toString());
         }
     }
 
@@ -86,34 +124,5 @@ public class Validator
             System.out.println(exception.getMessage());
         }
         return hashedBytes;
-    }
-
-    private void validate(File file1, File file2)
-    {
-        byte[] hashFile1 = null;
-        byte[] hashFile2 = null;
-        try{
-            hashFile1 = this.messageDigest(file1);
-            try{
-                FileReader fileReader = new FileReader(file2);
-                BufferedReader bufferedReader = new BufferedReader(fileReader);
-                try{
-                    String file2Contents = bufferedReader.readLine();
-                    hashFile2 = file2Contents.getBytes();
-                    boolean valid = MessageDigest.isEqual(hashFile1, hashFile2);
-                    if(valid){
-                        System.out.println(file1.getName() + " is valid");
-                    } else{
-                        System.out.println(file1.getName() + " is NOT valid");
-                    }
-                } catch(IOException exception3){
-                    System.out.println(exception3.toString());
-                }
-            } catch(FileNotFoundException exception2){
-                System.out.println(exception2.toString());
-            }
-        } catch(NoSuchAlgorithmException exception){
-            System.out.println(exception.toString());
-        }
     }
 }
