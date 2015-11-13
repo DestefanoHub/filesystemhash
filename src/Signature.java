@@ -3,11 +3,13 @@
  */
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
+
 import java.io.IOException;
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import javax.xml.bind.DatatypeConverter;
 
 public class Signature
 {
@@ -74,6 +76,7 @@ public class Signature
                 //Hash the file bytes
                 hasher.update(fileBytes);
                 hashedBytes = hasher.digest();
+                hasher.reset();
             } catch(IOException exception){
                 System.out.println(exception.getMessage());
             }
@@ -92,16 +95,29 @@ public class Signature
     {
         //Create output file as concatenation of directory and filename
         File outFile = new File(this.path2+"/"+file.getName());
+        //Convert byte array to hexadecimal String
+        String hexHash = DatatypeConverter.printHexBinary(byteArray);
         try{
-            FileOutputStream outputStream = new FileOutputStream(outFile);
-            try{
-                outputStream.write(byteArray);
-                outputStream.close();
-            } catch(IOException exception){
-                System.out.println(exception.getMessage());
-            }
+            //Use a PrintWriter to write a String
+            PrintWriter printer = new PrintWriter(outFile);
+            printer.write(hexHash);
+            printer.close();
         } catch(FileNotFoundException exception){
-            System.out.println(exception.getMessage());
+            System.out.println(exception.toString());
         }
+
+        //Create output file as concatenation of directory and filename
+//        File outFile = new File(this.path2+"/"+file.getName());
+//        try{
+//            FileOutputStream outputStream = new FileOutputStream(outFile);
+//            try{
+//                outputStream.write(byteArray);
+//                outputStream.close();
+//            } catch(IOException exception){
+//                System.out.println(exception.getMessage());
+//            }
+//        } catch(FileNotFoundException exception){
+//            System.out.println(exception.getMessage());
+//        }
     }
 }
