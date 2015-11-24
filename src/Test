@@ -1,0 +1,19 @@
+/**
+ * Tests password.java functionality
+ *  
+ * @author Victoria Johnson				Date: November 24, 2015
+ * 
+ */
+public class Test {
+
+	public static void main(String[] args) throws Exception{
+		
+		password pw = new password();
+		
+		pw.updatePassword("ThisismynewPassword!");
+		
+		System.out.println(pw.createHASH());
+		
+		System.out.println(pw.verify("ThisismynewPassword!"));
+	}
+}
