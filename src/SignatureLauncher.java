@@ -30,10 +30,10 @@ public class SignatureLauncher
             String input = scanner.nextLine();
             input = input.toLowerCase();
             if(input.equals("generate")){
-                Signature sig = new Signature("./directory1", "./directory2");
+                Signature sig = new Signature("./directory1", "./directory2", password);
                 sig.signatureAlgorithm();
             } else if(input.equals("validate")){
-                Validator val = new Validator("./directory1", "./directory2");
+                Validator val = new Validator("./directory1", "./directory2", password);
                 val.validationAlgorithm();
             } else{
                 System.out.println("Invalid option, please try again.");

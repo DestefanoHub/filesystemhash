@@ -15,16 +15,18 @@ public class Validator
 {
     private String path1;
     private String path2;
+    private String password;
 
     /**
      *
      * @param dir1Path
      * @param dir2Path
      */
-    public Validator(String dir1Path, String dir2Path)
+    public Validator(String dir1Path, String dir2Path, String passwd)
     {
         this.path1 = dir1Path;
         this.path2 = dir2Path;
+        this.password = passwd;
     }
 
     /**
