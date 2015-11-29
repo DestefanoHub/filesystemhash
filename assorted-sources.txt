@@ -1,0 +1,8 @@
+dice.png: www.nuget.com
+color-image-1: www.newton.ac.uk
+xkcd-random: xkcd.com
+randomness-wikipedia: https://en.wikipedia.org/wiki/Randomness
+color-wikipedia: https://en.wikipedia.org/wiki/Color
+hmac-wikipedia: https://en.wikipedia.org/wiki/Hash-based_message_authentication_code
+cryptography-wikipedia: https://en.wikipedia.org/wiki/Cryptography
+cryptography.jpg: news.sciencemag.org
