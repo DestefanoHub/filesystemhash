@@ -93,8 +93,11 @@ public class Signature
      */
     private void writeToOutFile(File file, byte[] byteArray)
     {
+        //Fix the file extension of all hash files to be .txt
+        String extension = file.getName().substring(file.getName().lastIndexOf("."));
+        String properFileName = file.getName().replace(extension, ".txt");
         //Create output file as concatenation of directory and filename
-        File outFile = new File(this.path2+"/"+file.getName());
+        File outFile = new File(this.path2+"/"+properFileName);
         //Convert byte array to hexadecimal String
         String hexHash = DatatypeConverter.printHexBinary(byteArray);
         try{

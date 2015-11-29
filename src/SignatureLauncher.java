@@ -40,7 +40,6 @@ public class SignatureLauncher
             }
         } else{
             System.out.println("Incorrect password, please try again.");
-            //System.exit(0);
         }
     }
 

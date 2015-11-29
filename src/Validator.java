@@ -43,11 +43,18 @@ public class Validator
             //Loop through all files in directory1
             for(File file1 : dir1Files){
                 //For each file, get the file name
+                //Remove the file extension
                 String file1Name = file1.getName();
+                int index1 = file1Name.indexOf(".");
+                String fixedFile1Name = file1Name.substring(0, index1);
                 //Loop through all files in directory2
                 for(File file2: dir2Files){
+                    //Remove the file extension
+                    String file2Name = file2.getName();
+                    int index2 = file2Name.indexOf(".");
+                    String fixedFile2Name = file2Name.substring(0, index2);
                     //Check if directory2 file name matches directory1 file name
-                    if(file2.getName().equals(file1Name)){
+                    if(fixedFile2Name.equals(fixedFile1Name)){
                         this.validate(file1, file2);
                     }
                 }
