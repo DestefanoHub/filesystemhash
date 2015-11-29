@@ -18,20 +18,27 @@ public class SignatureLauncher
      */
     public static void main(String[] args)
     {
+        //Prompt user for password
         System.out.println("Please enter your password to use the HMAC file verification program.");
         Scanner scanner = new Scanner(System.in);
         String password = scanner.nextLine();
         password = password.toLowerCase();
+        //Get password as bytes
         byte[] passwordBytes = password.getBytes();
+        //Hash the password
         byte[] hashedPasswordBytes = getHashedPassword(passwordBytes);
+        //Compare user input against password file
         boolean passwordMatch = passwordCompare(hashedPasswordBytes);
+        //If password is good, prompt user for next step
         if(passwordMatch == true){
             System.out.println("Enter 'generate' to generate a hash value for a new file, or enter 'validate' to validate the existing files.");
             String input = scanner.nextLine();
             input = input.toLowerCase();
+            //Perform the signature step
             if(input.equals("generate")){
                 Signature sig = new Signature("./directory1", "./directory2", password);
                 sig.signatureAlgorithm();
+            //Perform the validation step
             } else if(input.equals("validate")){
                 Validator val = new Validator("./directory1", "./directory2", password);
                 val.validationAlgorithm();
@@ -56,7 +63,6 @@ public class SignatureLauncher
         try{
             //Use SHA-512
             MessageDigest hasher = MessageDigest.getInstance("SHA-512");
-            //File passwordFile = new File("./password.txt");
             //Hash the file bytes
             hasher.update(passwordFileBytes);
             //Finish and cleanup

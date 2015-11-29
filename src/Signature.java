@@ -6,8 +6,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import java.security.MessageDigest;
+import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 
 public class Signature
@@ -20,6 +22,7 @@ public class Signature
      *
      * @param dir1Path
      * @param dir2Path
+     * @param passwd
      */
     public Signature(String dir1Path, String dir2Path, String passwd)
     {
@@ -63,8 +66,13 @@ public class Signature
      */
     private byte[] messageDigest(File file) throws NoSuchAlgorithmException
     {
-        //Use SHA-512
-        MessageDigest hasher = MessageDigest.getInstance("SHA-512");
+        Mac hasher = Mac.getInstance("HmacSHA512");
+        SecretKeySpec hmacKey = new SecretKeySpec(this.password.getBytes(), "HmacSHA512");
+        try{
+            hasher.init(hmacKey);
+        } catch(InvalidKeyException exception){
+            System.out.println(exception.getMessage());
+        }
         byte[] hashedBytes = null;
         //Storage for digest bytes
         byte[] fileBytes = new byte[(int) file.length()];
@@ -75,9 +83,7 @@ public class Signature
                 int bytesRead = inputStream.read(fileBytes);
                 inputStream.close();
                 //Hash the file bytes
-                hasher.update(fileBytes);
-                //Finish and cleanup
-                hashedBytes = hasher.digest();
+                hashedBytes = hasher.doFinal(fileBytes);
                 hasher.reset();
             } catch(IOException exception){
                 System.out.println(exception.getMessage());
